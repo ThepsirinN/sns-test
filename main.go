@@ -8,6 +8,7 @@ import (
 	"os/signal"
 	"sns-barko/config"
 	"sns-barko/utility/logger"
+	"sns-barko/utility/tracer"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -19,10 +20,18 @@ func main() {
 	bgCtx := context.Background()
 	cfg, secret := config.InitConfig()
 	logger.InitLogger(cfg)
+	defer logger.Sync()
+
 	ctx, stop := signal.NotifyContext(bgCtx, os.Interrupt, os.Kill)
 	defer stop()
+	tp := tracer.InitTraceProvider(ctx, cfg.Log.Env, "sns-test")
+	defer func() {
+		if err := tp.Shutdown(ctx); err != nil {
+			logger.Fatal(ctx, err)
+		}
+	}()
 
-	routerV1 := initRouter()
+	routerV1 := initRouter(cfg)
 	go initEcho(ctx, routerV1, secret)
 	// e.GET("/api-doc/*", echoSwagger.WrapHandler)
 

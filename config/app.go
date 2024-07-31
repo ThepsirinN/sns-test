@@ -1,6 +1,7 @@
 package config
 
 type AppConfig struct {
+	Name string `env:"CONFIG.APP.NAME"`
 }
 
 type AppSecret struct {

@@ -8,6 +8,7 @@ require (
 	github.com/labstack/echo/v4 v4.12.0
 	github.com/swaggo/echo-swagger v1.4.1
 	github.com/swaggo/swag v1.16.3
+	go.opentelemetry.io/contrib/instrumentation/github.com/labstack/echo/otelecho v0.53.0
 	go.opentelemetry.io/otel v1.28.0
 	go.opentelemetry.io/otel/sdk v1.28.0
 	go.opentelemetry.io/otel/trace v1.28.0

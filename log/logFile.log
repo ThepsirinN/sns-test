@@ -1,0 +1,3 @@
+{"level":"INFO","timestamp":"01 Aug 2024 00:49:22+07:00","caller":"sns-test/router.go:39","message":"test","traceId":"440ca61864bcf3ff918cb2183dc2d579","spanId":"6c155b27c56f5312"}
+{"level":"INFO","timestamp":"01 Aug 2024 00:49:26+07:00","caller":"sns-test/router.go:39","message":"test","traceId":"290eff4e6493b4ab6d087205b2da3b8e","spanId":"9d4aafc963ccd62a"}
+ain\n\t/Users/a667181/Desktop/ThepsirinN/sns-test/main.go:27\nruntime.main\n\t/usr/local/go/src/runtime/proc.go:271"}
