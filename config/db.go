@@ -4,7 +4,6 @@ import "time"
 
 type DatabaseConfig struct {
 	Name            string        `env:"CONFIG.DATABASE.NAME"`
-	Table           string        `env:"CONFIG.DATABASE.TABLE"`
 	ConnMaxLifeTime time.Duration `env:"CONFIG.DATABASE.ConnMaxLifeTime"`
 	MaxOpenConns    int           `env:"CONFIG.DATABASE.MaxOpenConns"`
 	MaxIdleConns    int           `env:"CONFIG.DATABASE.MaxIdleConns"`

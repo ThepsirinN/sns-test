@@ -89,6 +89,11 @@ func Fatal(ctx context.Context, err error, field ...zapcore.Field) {
 	logger.Fatal(err.Error(), field...)
 }
 
+func Panic(ctx context.Context, err error, field ...zapcore.Field) {
+	addTraceFromCtx(ctx, &field)
+	logger.Panic(err.Error(), field...)
+}
+
 func Sync() {
 	logger.Sync()
 }
