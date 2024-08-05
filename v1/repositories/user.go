@@ -7,10 +7,6 @@ import (
 	"sns-barko/v1/models"
 )
 
-func (r *repoV1) AutoMigrate(ctx context.Context) error {
-	return r.db.WithContext(ctx).AutoMigrate(&models.User{})
-}
-
 func (r *repoV1) CreateUser(ctx context.Context, model models.User) error {
 	tx := r.db.WithContext(ctx).Create(&model)
 	if err := tx.Error; err != nil {
