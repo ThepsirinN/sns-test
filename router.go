@@ -52,6 +52,9 @@ func initRouter(cfg *config.Config, jwtSecret string, handlersV1 *handlers.Handl
 	v1UserGroup(userV1, handlersV1)
 	v1UserAuthGroup(userV1, handlersV1, jwtSecret)
 
+	friendV1 := apiV1.Group("/friend")
+	v1FriendAuthGroup(friendV1, handlersV1, jwtSecret)
+
 	return e
 }
 
@@ -65,4 +68,13 @@ func v1UserAuthGroup(g *echo.Group, handlersV1 *handlers.HandlersV1, jwtSecret s
 	g.DELETE("/delete", handlersV1.DeleteUser)
 	g.GET("/find_user/:email", handlersV1.FindUserByEmail)
 	g.PATCH("/update", handlersV1.UpdateUser)
+}
+
+func v1FriendAuthGroup(g *echo.Group, handlersV1 *handlers.HandlersV1, jwtSecret string) {
+	g.Use(auth.MiddleWareAuth(jwtSecret))
+	g.POST("/create", handlersV1.CreateFriendRequest)
+	g.GET("/all-friend-request", handlersV1.GetAllFriendRequest) // can separate for sending and receive
+	g.GET("/list-all-friend", handlersV1.ListFriend)
+	g.PATCH("/update-status", handlersV1.UpdateFriendRequestStatus)
+	g.DELETE("/delete", handlersV1.DeleteFriend)
 }

@@ -25,6 +25,7 @@ type (
 	}
 
 	FindUserByEmailResponse struct {
+		Id         int32   `json:"id"`
 		Email      string  `json:"email"`
 		Firstname  string  `json:"first_name"`
 		Lastname   string  `json:"last_name"`

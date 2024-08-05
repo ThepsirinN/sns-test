@@ -4,18 +4,21 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
 	"sns-barko/config"
 	"sns-barko/utility/logger"
 	"sns-barko/utility/tracer"
+	"sns-barko/v1/cache"
 	"sns-barko/v1/handlers"
 	"sns-barko/v1/repositories"
 	"sns-barko/v1/services"
 	"time"
 
 	"github.com/labstack/echo/v4"
+	"github.com/redis/go-redis/v9"
 	_ "github.com/swaggo/echo-swagger/example/docs"
 	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
@@ -30,7 +33,9 @@ func main() {
 
 	db := initDatabse(bgCtx, cfg, secret)
 	repoV1 := repositories.New(db)
-	svcV1 := services.New(bgCtx, repoV1, secret)
+	redis := initRedis(bgCtx, cfg, secret)
+	cacheV1 := cache.New(redis)
+	svcV1 := services.New(bgCtx, repoV1, cacheV1, secret)
 	handlersV1 := handlers.New(svcV1)
 
 	ctx, stop := signal.NotifyContext(bgCtx, os.Interrupt, os.Kill)
@@ -98,4 +103,25 @@ func initDatabse(ctx context.Context, cfg *config.Config, secret *config.Secret)
 		zap.String("max_life_time_minutes_string", cfg.Database.ConnMaxLifeTime.String()),
 	)
 	return db
+}
+
+func initRedis(ctx context.Context, cfg *config.Config, secret *config.Secret) *redis.Client {
+	redisAddr := net.JoinHostPort(secret.Cache.Host, secret.Cache.Port)
+	logger.Info(ctx, "Initialing redis with redis address",
+		zap.String("address", redisAddr),
+		zap.String("database", string(cfg.Cache.Database)),
+		zap.Int("pool_max_active", cfg.Cache.PoolMaxActive),
+		zap.Int("pool_max_idle", cfg.Cache.PoolMaxIdle),
+		zap.Duration("pool_timeout", cfg.Cache.PoolTimeout),
+		zap.String("pool_timeout_string", cfg.Cache.PoolTimeout.String()),
+	)
+	return redis.NewClient(&redis.Options{
+		Addr:            redisAddr,
+		DB:              cfg.Cache.Database,
+		Password:        secret.Cache.Password,
+		MinIdleConns:    cfg.Cache.PoolMaxIdle,
+		PoolSize:        cfg.Cache.PoolMaxActive,
+		ConnMaxIdleTime: cfg.Cache.PoolTimeout,
+		PoolTimeout:     cfg.Cache.PoolTimeout,
+	})
 }

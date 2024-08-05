@@ -28,7 +28,7 @@ func (s *serviceV1) CreateUser(ctx context.Context, req entities.CreateUserReque
 		Auth:       string(hashBytes),
 	}
 
-	err = s.userRepo.CreateUser(ctx, model)
+	err = s.repoV1.CreateUser(ctx, model)
 	if err != nil {
 		return err
 	}
@@ -41,7 +41,7 @@ func (s *serviceV1) AuthUser(ctx context.Context, req entities.AuthUserRequest, 
 		Email: req.Email,
 	}
 
-	err := s.userRepo.ReadUsersByEmail(ctx, &model)
+	err := s.repoV1.ReadUsersByEmail(ctx, &model)
 	if err != nil {
 		return err
 	}
@@ -72,13 +72,14 @@ func (s *serviceV1) AuthUser(ctx context.Context, req entities.AuthUserRequest, 
 
 func (s *serviceV1) FindUsersByEmail(ctx context.Context, userId int32, req entities.FindUserByEmailRequest, resp *[]entities.FindUserByEmailResponse) error {
 	var model []models.User
-	err := s.userRepo.FindUsersByEmail(ctx, req.Email, userId, &model)
+	err := s.repoV1.FindUsersByEmail(ctx, req.Email, userId, &model)
 	if err != nil {
 		return err
 	}
 	i, length := 0, len(model)
 	for i < length {
 		*resp = append(*resp, entities.FindUserByEmailResponse{
+			Id:         model[i].Id,
 			Email:      model[i].Email,
 			Firstname:  model[i].Firstname,
 			Lastname:   model[i].Lastname,
@@ -116,12 +117,12 @@ func (s *serviceV1) UpdateUser(ctx context.Context, req entities.UpdateUserReque
 		model.Auth = string(hashBytes)
 	}
 
-	err := s.userRepo.UpdateUsers(ctx, model)
+	err := s.repoV1.UpdateUsers(ctx, model)
 	if err != nil {
 		return err
 	}
 
-	err = s.userRepo.ReadUsersById(ctx, &model)
+	err = s.repoV1.ReadUsersById(ctx, &model)
 
 	if err != nil {
 		return err
@@ -151,7 +152,7 @@ func (s *serviceV1) DeleteUser(ctx context.Context, req entities.DeleteUserReque
 		Id:        req.Id,
 		DeletedAt: ptr.ToPointer(time.Now().Local()),
 	}
-	err := s.userRepo.DeleteUserById(ctx, model)
+	err := s.repoV1.DeleteUserById(ctx, model)
 	if err != nil {
 		return err
 	}
