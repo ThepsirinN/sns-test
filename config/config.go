@@ -1,9 +1,7 @@
 package config
 
 import (
-	"fmt"
 	"log"
-	"os"
 	"path/filepath"
 	"sns-barko/constant"
 
@@ -22,6 +20,7 @@ type Secret struct {
 	App      AppSecret
 	Database DatabaseSecret
 	Cache    CacheSecret
+	User     User
 }
 
 var cfg Config
@@ -56,11 +55,6 @@ func initConfig() error {
 	if err := env.Parse(&secret); err != nil {
 		return err
 	}
-
-	fmt.Println(os.Environ())
-
-	fmt.Println(cfg)
-	fmt.Println(secret)
 
 	return nil
 }

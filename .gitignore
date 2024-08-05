@@ -3,3 +3,4 @@
 /config/redis.conf
 .vscode
 .DS_Store
+/log
