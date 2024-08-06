@@ -19,5 +19,5 @@ func New(db *gorm.DB) *repoV1 {
 }
 
 func (r *repoV1) AutoMigrate(ctx context.Context) error {
-	return r.db.WithContext(ctx).AutoMigrate(&models.User{}, &models.Friend{})
+	return r.db.WithContext(ctx).AutoMigrate(&models.User{}, &models.Friend{}, &models.Post{})
 }

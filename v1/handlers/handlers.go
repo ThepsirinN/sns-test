@@ -17,6 +17,15 @@ type servicesV1Interface interface {
 	ListFriend(ctx context.Context, req entities.ListFriendRequest, resp *[]entities.ListFriendResponse) error
 	UpdateFriendRequestStatus(ctx context.Context, req entities.UpdateFriendRequestStatusRequest) error
 	DeleteFriend(ctx context.Context, req entities.DeleteFriendRequestRequest) error
+
+	CreatePost(ctx context.Context, req entities.CreatePostRequest) error
+	ListAllPostFromUser(ctx context.Context, req entities.ListAllPostFromUserRequest, resp *[]entities.ListAllPostFromUserResponse) error
+	ReadPostByPostId(ctx context.Context, req entities.ReadPostByPostIdRequest, resp *entities.ReadPostByPostIdResponse) error
+	UpdatePostData(ctx context.Context, req entities.UpdatePostRequest) error
+	DeletePost(ctx context.Context, req entities.DeletePostRequest) error
+
+	AddLike(ctx context.Context, req entities.AddLikeRequest) error
+	DeleteLike(ctx context.Context, req entities.DeleteLikeRequest) error
 }
 
 type HandlersV1 struct {

@@ -32,6 +32,7 @@ func initRouter(cfg *config.Config, jwtSecret string, handlersV1 *handlers.Handl
 	e.Validator = &customValidator{validator: validator.New()}
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORS())
+	// e.GET("/swagger/*", echoSwagger.WrapHandler)
 	e.GET("/health", func(c echo.Context) error {
 		return c.JSON(http.StatusOK, response.NewResponse[any](response.CODE_SUCCESS, "service is running!", nil))
 	})
@@ -55,6 +56,12 @@ func initRouter(cfg *config.Config, jwtSecret string, handlersV1 *handlers.Handl
 	friendV1 := apiV1.Group("/friend")
 	v1FriendAuthGroup(friendV1, handlersV1, jwtSecret)
 
+	postV1 := apiV1.Group("/post")
+	v1PostAuthGroup(postV1, handlersV1, jwtSecret)
+
+	likeV1 := apiV1.Group("/like")
+	v1LikeAuthGroup(likeV1, handlersV1, jwtSecret)
+
 	return e
 }
 
@@ -77,4 +84,19 @@ func v1FriendAuthGroup(g *echo.Group, handlersV1 *handlers.HandlersV1, jwtSecret
 	g.GET("/list-all-friend", handlersV1.ListFriend)
 	g.PATCH("/update-status", handlersV1.UpdateFriendRequestStatus)
 	g.DELETE("/delete", handlersV1.DeleteFriend)
+}
+
+func v1PostAuthGroup(g *echo.Group, handlersV1 *handlers.HandlersV1, jwtSecret string) {
+	g.Use(auth.MiddleWareAuth(jwtSecret))
+	g.POST("/create", handlersV1.CreatePost)
+	g.GET("/all-posts", handlersV1.ListAllPostFromUser) // can separate for sending and receive
+	g.GET("/post/:id", handlersV1.ReadPostByPostId)
+	g.PATCH("/update", handlersV1.UpdatePostData)
+	g.DELETE("/delete", handlersV1.DeletePost)
+}
+
+func v1LikeAuthGroup(g *echo.Group, handlersV1 *handlers.HandlersV1, jwtSecret string) {
+	g.Use(auth.MiddleWareAuth(jwtSecret))
+	g.POST("/add", handlersV1.AddLike)
+	g.DELETE("/delete", handlersV1.DeleteLike)
 }
