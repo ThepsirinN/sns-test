@@ -22,6 +22,15 @@ type repoV1Interface interface {
 	ListFriend(ctx context.Context, id int32, model *[]entities.ListFriendQuery) error
 	UpdateFriendRequestStatus(ctx context.Context, model models.Friend) error
 	DeleteFriend(ctx context.Context, model models.Friend) error
+
+	CreatePost(ctx context.Context, model models.Post) error
+	ListAllPostFromUser(ctx context.Context, userId int32, model *[]entities.ListAllPostFromUserResponse) error
+	ReadPostByPostId(ctx context.Context, model *entities.ReadPostByPostIdResponse) error
+	UpdatePostData(ctx context.Context, model models.Post) error
+	DeletePost(ctx context.Context, model models.Post) error
+
+	UpdateLike(ctx context.Context, model models.Post, like entities.Like) error
+	DeleteLike(ctx context.Context, model models.Post, like entities.Like) error
 }
 
 type cacheV1 interface {
