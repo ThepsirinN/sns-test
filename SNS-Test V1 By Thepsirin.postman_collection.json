@@ -1,0 +1,686 @@
+{
+	"info": {
+		"_postman_id": "2f6892c5-c70b-4447-b092-666f3965e8e0",
+		"name": "SNS-Test V1 By Thepsirin",
+		"description": "<u><b>Conclusion</b></u>\n\nThis Is the API Documemt For SNS-Test V1 By Thepsirin. In This API service you can\n\n- Create, Read, Update, Delete user and authenticate\n    \n- Create Friend, View all friend Request, List all friend, Update friend status and Delete friend\n    \n- Create Post, View all user post, Read specific post, Update and Delete post\n    \n- Add like to post and delete like\n    \n\nFor The future we will created API for managing Comment.\n\n<u><b>Note</b></u>\n\n- Standard code for response\n    \n    - { \"code\" : 2000, \"message\" : \"success\", \"data\" : ...}\n        \n    - { \"code\" : 4000, \"message\" : \"API failed\", \"data\" : ...}\n        \n    - { \"code\" : 4001, \"message\" : \"unauthorize\", \"data\" : ...}\n        \n    - { \"code\" : 4004, \"message\" : \"not found\", \"data\" : ...}\n        \n- For type Mandatory field is standing for\n    \n    - M : Mandatory\n        \n    - O : Optional\n        \n    - C : Condition\n        \n\nFor more information view the full API docs.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28477681"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "CreateUser",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"barko132@gmail.com\",\n    \"first_name\": \"barkoBank10\",\n    \"last_name\": \"barkoBank10\",\n    \"profile_image\":null,\n    \"password\": \"12345678\",\n    \"confirm_password\": \"12345678\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"register"
+							]
+						},
+						"description": "## <u>Conclusion</u>\n\nThis API is for creating User data\n\n## <u>Request Schema</u>\n\n| **Field** | **Location** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- | --- |\n| email | body | string | M | **Max** : 30 |\n| first_name | body | string | M | **Max** : 60 |\n| last_name | body | string | M | **Max** : 60 |\n| profile_image | body | string | O | **Format** : Url |\n| password | body | string | M | **Min** : 8  <br>**Max** : 20 |\n| confirm_password | body | string | M | **Min** : 8  <br>**Max** : 20 |\n\n## <u>Response Schema</u>\n\n| **Field** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- |\n| code | int | M |  |\n| message | string | M |  |\n| data | object | O |  |"
+					},
+					"response": []
+				},
+				{
+					"name": "Authenticate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"barko127@gmail.com\",\n    \"password\":\"12345678\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user/auth",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"auth"
+							]
+						},
+						"description": "## <u>Conclusion</u>\n\nThis API is for getting JWT that use in collection\n\n## <u>Request Schema</u>\n\n| **Field** | **Location** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- | --- |\n| email | body | string | M |  |\n| password | body | string | M | **Min** : 8  <br>**Max** : 20 |\n\n## <u>Response Schema</u>\n\n| **Field** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- |\n| code | int | M |  |\n| message | string | M |  |\n| data | object | O |  |\n| data.user_data | string | M |  |"
+					},
+					"response": []
+				},
+				{
+					"name": "Set Authenticate For Auth API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let data = pm.response.json()",
+									"if (data.code === 2000) {",
+									"    pm.collectionVariables.set(\"jwt_signed\",data.data.user_data)",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"barko127@gmail.com\",\n    \"password\":\"12345678\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user/auth",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"auth"
+							]
+						},
+						"description": "## <u>Conclusion</u>\n\nThis API is for generating JWT that use in collection\n\n## <u>Request Schema</u>\n\n| **Field** | **Location** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- | --- |\n| email | body | string | M |  |\n| password | body | string | M | **Min** : 8  <br>**Max** : 20 |\n\n## <u>Response Schema</u>\n\n| **Field** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- |\n| code | int | M |  |\n| message | string | M |  |\n| data | object | O |  |\n| data.user_data | string | M |  |"
+					},
+					"response": []
+				}
+			],
+			"description": "This is and API for manage Create User and set JWT Token for use another API"
+		},
+		{
+			"name": "[Auth] User",
+			"item": [
+				{
+					"name": "FindUserByEmail",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_signed}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/user/find_user/:email",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"find_user",
+								":email"
+							],
+							"variable": [
+								{
+									"key": "email",
+									"value": "barko12"
+								}
+							]
+						},
+						"description": "## <u>Conclusion</u>\n\nThis API is for finding User by email\n\n## <u>Request Schema</u>\n\n| **Field** | **Location** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- | --- |\n| Authorization | header | string | M | JWT |\n| email | path params | string | M |  |\n\n## <u>Response Schema</u>\n\n| **Field** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- |\n| code | int | M |  |\n| message | string | M |  |\n| data | array object | O |  |\n| data\\[\\].id | int | M |  |\n| data\\[\\].email | string | M |  |\n| data\\[\\].first_name | string | M |  |\n| data\\[\\].last_name | string | M |  |\n| data\\[\\].profile_img | string | O |  |"
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let data = pm.response.json()",
+									"if (data.code === 2000) {",
+									"    pm.collectionVariables.set(\"jwt_signed\",data.data.user_data)",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_signed}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"first_name\":\"barko1234\",\n    \"last_name\":\"\",\n    \"profile_image\":\"\",\n    \"password\":\"12345678\",\n    \"confirm_password\":\"12345678\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user/update",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"update"
+							]
+						},
+						"description": "## <u>Conclusion</u>\n\nThis API is for updating User\n\n## <u>Request Schema</u>\n\n| **Field** | **Location** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- | --- |\n| Authorization | header | string | M | JWT |\n| first_name | body | string | O | **Max** : 60 |\n| last_name | body | string | O | **Max** : 60 |\n| profile_image | body | string | O | **Format** : Url |\n| password | body | string | O | **Min** : 8  <br>**Max** : 20 |\n| confirm_password | body | string | C (If password set) | **Min** : 8  <br>**Max** : 20 |\n\n## <u>Response Schema</u>\n\n| **Field** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- |\n| code | int | M |  |\n| message | string | M |  |\n| data | object | O |  |"
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let data = pm.response.json()",
+									"if (data.code === 2000) {",
+									"    pm.collectionVariables.set(\"jwt_signed\",data.data.user_data)",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_signed}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/user/delete",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"delete"
+							]
+						},
+						"description": "## <u>Conclusion</u>\n\nThis API is for deleting User\n\n## <u>Request Schema</u>\n\n| **Field** | **Location** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- | --- |\n| Authorization | header | string | M | JWT |\n\n## <u>Response Schema</u>\n\n| **Field** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- |\n| code | int | M |  |\n| message | string | M |  |\n| data | object | O |  |"
+					},
+					"response": []
+				}
+			],
+			"description": "This API use JWT token to manage User"
+		},
+		{
+			"name": "[Auth] Friend",
+			"item": [
+				{
+					"name": "CreateFriendRequest",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_signed}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"dest_id\":12\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/friend/create",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"friend",
+								"create"
+							]
+						},
+						"description": "## <u>Conclusion</u>\n\nThis API is for creating Friend request\n\n## <u>Request Schema</u>\n\n| **Field** | **Location** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- | --- |\n| Authorization | header | string | M | JWT |\n| dest_id | body | string | M | friend user id |\n\n## <u>Response Schema</u>\n\n| **Field** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- |\n| code | int | M |  |\n| message | string | M |  |\n| data | object | O |  |"
+					},
+					"response": []
+				},
+				{
+					"name": "AllFriendRequest",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_signed}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/friend/all-friend-request",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"friend",
+								"all-friend-request"
+							]
+						},
+						"description": "## <u>Conclusion</u>\n\nThis API is for retrieving Friend request that user sent and received from other\n\n## <u>Request Schema</u>\n\n| **Field** | **Location** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- | --- |\n| Authorization | header | string | M | JWT |\n\n## <u>Response Schema</u>\n\n| **Field** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- |\n| code | int | M |  |\n| message | string | M |  |\n| data | array object | O |  |\n| data\\[\\].id | int | M |  |\n| data\\[\\].source_id | int | M |  |\n| data\\[\\].dest_id | int | M |  |\n| data\\[\\].status | string | M | Possible value is  <br>1 (Pending)  <br>2 (success)  <br>  <br>for this api is focus on 1  <br>  <br>1 if source_id match with userId in authorization header then \"รอการอนุมัติจากฝั่งตรงข้าม\"  <br>else \"รอการตอบรับเป็นเพื่อน\" |\n| data\\[\\].source_email | string | M |  |\n| data\\[\\].source_first_name | string | M |  |\n| data\\[\\].source_last_name | string | M |  |\n| data\\[\\].source_profile_image | string | O |  |\n| data\\[\\].dest_email | string | M |  |\n| data\\[\\].dest_first_name | string | M |  |\n| data\\[\\].dest_last_name | string | M |  |\n| data\\[\\].dest_profile_image | string | O |  |"
+					},
+					"response": []
+				},
+				{
+					"name": "ListAllFriend",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_signed}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/friend/list-all-friend",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"friend",
+								"list-all-friend"
+							]
+						},
+						"description": "## <u>Conclusion</u>\n\nThis API is for retrieving all User Friend\n\n## <u>Request Schema</u>\n\n| **Field** | **Location** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- | --- |\n| Authorization | header | string | M | JWT |\n\n## <u>Response Schema</u>\n\n| **Field** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- |\n| code | int | M |  |\n| message | string | M |  |\n| data | array object | O |  |\n| data\\[\\].id | int | M |  |\n| data\\[\\].source_id | int | M |  |\n| data\\[\\].dest_id | int | M |  |\n| data\\[\\].status | string | M | Possible value is  <br>1 (Pending)  <br>2 (success)  <br>  <br>for this api is focus on 2 |\n| data\\[\\].source_email | string | M |  |\n| data\\[\\].source_first_name | string | M |  |\n| data\\[\\].source_last_name | string | M |  |\n| data\\[\\].source_profile_image | string | O |  |\n| data\\[\\].dest_email | string | M |  |\n| data\\[\\].dest_first_name | string | M |  |\n| data\\[\\].dest_last_name | string | M |  |\n| data\\[\\].dest_profile_image | string | O |  |"
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateFriendStatus",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_signed}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"source_id\": 12,\n    \"dest_id\": 13\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/friend/update-status",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"friend",
+								"update-status"
+							]
+						},
+						"description": "## <u>Conclusion</u>\n\nThis API is for updating Friend request status to success for user_id that match with source_id\n\n## <u>Request Schema</u>\n\n| **Field** | **Location** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- | --- |\n| Authorization | header | string | M | JWT |\n| id | body | int | M | friend_request id |\n| source_id | body | int | M |  |\n| dest_id | body | int | M | must matching with user_id in authorization header |\n\n## <u>Response Schema</u>\n\n| **Field** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- |\n| code | int | M |  |\n| message | string | M |  |\n| data | object | O |  |"
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteFriend",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_signed}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"source_id\": 12,\n    \"dest_id\": 13\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/friend/delete",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"friend",
+								"delete"
+							]
+						},
+						"description": "## <u>Conclusion</u>\n\nThis API is for deleting Friend\n\n## <u>Request Schema</u>\n\n| **Field** | **Location** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- | --- |\n| Authorization | header | string | M | JWT |\n| id | body | int | M | friend_request id |\n| source_id | body | int | M |  |\n| dest_id | body | int | M |  |\n\n## <u>Response Schema</u>\n\n| **Field** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- |\n| code | int | M |  |\n| message | string | M |  |\n| data | object | O |  |"
+					},
+					"response": []
+				}
+			],
+			"description": "This API use JWT token to manage Friend"
+		},
+		{
+			"name": "[Auth] Post",
+			"item": [
+				{
+					"name": "CreatePost",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_signed}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"post_data\":\"\",\n    \"post_img\":null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/post/create",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"post",
+								"create"
+							]
+						},
+						"description": "## <u>Conclusion</u>\n\nThis API is for creating Post\n\n## <u>Request Schema</u>\n\n| **Field** | **Location** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- | --- |\n| Authorization | header | string | M | JWT |\n| post_data | body | string | M |  |\n| post_img | body | string | O |  |\n\n## <u>Response Schema</u>\n\n| **Field** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- |\n| code | int | M |  |\n| message | string | M |  |\n| data | object | O |  |"
+					},
+					"response": []
+				},
+				{
+					"name": "AllUserPost",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_signed}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"post_data\":\"\",\n    \"post_img\":\"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/post/all-posts",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"post",
+								"all-posts"
+							]
+						},
+						"description": "## <u>Conclusion</u>\n\nThis API is for retrieving all user Post\n\n## <u>Request Schema</u>\n\n| **Field** | **Location** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- | --- |\n| Authorization | header | string | M | JWT |\n\n## <u>Response Schema</u>\n\n| **Field** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- |\n| code | int | M |  |\n| message | string | M |  |\n| data | array object | O |  |\n| data\\[\\].id | int | M | Post Id |\n| data\\[\\].owner_id | int | M |  |\n| data\\[\\].owner_first_name | string | M |  |\n| data\\[\\].owner_last_name | string | M |  |\n| data\\[\\].owner_profile_img | string | M |  |\n| data\\[\\].post_data | string | M |  |\n| data\\[\\].post_img | string | O |  |\n| data\\[\\].comment | \\[\\]JSON | O | Format  <br>\\[{  <br>\"id\" : string  <br>\"user_id\" : int  <br>\"user_first_name\" : string  <br>\"user_last_name\" : string  <br>\"user_img_profile\" : string  <br>\"comment_data\" : string  <br>\"comment_img\" : string  <br>\"create_at\" : string  <br>}\\] |\n| data\\[\\].like | \\[\\]JSON | O | Format  <br>\\[{  <br>\"id\" : string  <br>\"user_id\": int  <br>}\\] |\n| data\\[\\].created_at | string | M |  |\n| data\\[\\].updated_at | string | O |  |"
+					},
+					"response": []
+				},
+				{
+					"name": "ReadPostByID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_signed}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/post/post/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"post",
+								"post",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "12"
+								}
+							]
+						},
+						"description": "## <u>Conclusion</u>\n\nThis API is for retrieving specific user Post\n\n## <u>Request Schema</u>\n\n| **Field** | **Location** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- | --- |\n| Authorization | header | string | M | JWT |\n| id | body | string | M | post_id |\n\n## <u>Response Schema</u>\n\n| **Field** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- |\n| code | int | M |  |\n| message | string | M |  |\n| data | object | O |  |\n| data.id | int | M | Post Id |\n| data.owner_id | int | M |  |\n| data.owner_first_name | string | M |  |\n| data.owner_last_name | string | M |  |\n| data.owner_profile_img | string | M |  |\n| data.post_data | string | M |  |\n| data.post_img | string | O |  |\n| data.comment | \\[\\]JSON | O | Format  <br>\\[{  <br>\"id\" : string  <br>\"user_id\" : int  <br>\"user_first_name\" : string  <br>\"user_last_name\" : string  <br>\"user_img_profile\" : string  <br>\"comment_data\" : string  <br>\"comment_img\" : string  <br>\"create_at\" : string  <br>}\\] |\n| data.like | \\[\\]JSON | O | Format  <br>\\[{  <br>\"id\" : string  <br>\"user_id\": int  <br>}\\] |\n| data.created_at | string | M |  |\n| data.updated_at | string | O |  |"
+					},
+					"response": []
+				},
+				{
+					"name": "UpdatePost",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_signed}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 123,\n    \"post_data\":\"\",\n    \"post_img\": null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/post/update",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"post",
+								"update"
+							]
+						},
+						"description": "## <u>Conclusion</u>\n\nThis API is for updating specific user Post\n\n## <u>Request Schema</u>\n\n| **Field** | **Location** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- | --- |\n| Authorization | header | string | M | JWT |\n| id | body | string | M | post_id |\n| post_data | body | string | M |  |\n| post_img | body | string | O |  |\n\n## <u>Response Schema</u>\n\n| **Field** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- |\n| code | int | M |  |\n| message | string | M |  |\n| data | object | O |  |"
+					},
+					"response": []
+				},
+				{
+					"name": "DeletePost",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_signed}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 123\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/post/delete",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"post",
+								"delete"
+							]
+						},
+						"description": "## <u>Conclusion</u>\n\nThis API is for deleting specific user Post\n\n## <u>Request Schema</u>\n\n| **Field** | **Location** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- | --- |\n| Authorization | header | string | M | JWT |\n| id | body | string | M | post_id |\n\n## <u>Response Schema</u>\n\n| **Field** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- |\n| code | int | M |  |\n| message | string | M |  |\n| data | object | O |  |"
+					},
+					"response": []
+				}
+			],
+			"description": "This API use JWT token to manage Post"
+		},
+		{
+			"name": "[Auth] Like",
+			"item": [
+				{
+					"name": "CreateLike",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_signed}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"post_id\": 123\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/like/add",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"like",
+								"add"
+							]
+						},
+						"description": "## <u>Conclusion</u>\n\nThis API is for creating specific user Post like\n\n## <u>Request Schema</u>\n\n| **Field** | **Location** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- | --- |\n| Authorization | header | string | M | JWT |\n| id | body | string | M | post_id |\n\n\n## <u>Response Schema</u>\n\n| **Field** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- |\n| code | int | M |  |\n| message | string | M |  |\n| data | object | O |  |"
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteLike",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_signed}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"post_id\": 123\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/like/create",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"like",
+								"create"
+							]
+						},
+						"description": "## <u>Conclusion</u>\n\nThis API is for deleting specific user Post like\n\n## <u>Request Schema</u>\n\n| **Field** | **Location** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- | --- |\n| Authorization | header | string | M | JWT |\n| id | body | string | M | post_id |\n\n## <u>Response Schema</u>\n\n| **Field** | **Type** | **Mandatory (M/O/C)** | **Description** |\n| --- | --- | --- | --- |\n| code | int | M |  |\n| message | string | M |  |\n| data | object | O |  |"
+					},
+					"response": []
+				}
+			],
+			"description": "This API use JWT token to manage Post Like"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "id",
+			"value": "1"
+		},
+		{
+			"key": "base_url",
+			"value": "http://localhost:9876/api/v1"
+		},
+		{
+			"key": "jwt_signed",
+			"value": ""
+		}
+	]
+}
