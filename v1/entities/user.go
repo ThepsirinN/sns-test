@@ -48,5 +48,5 @@ type (
 	}
 )
 type DeleteUserRequest struct {
-	Id int32 `validte:"required"`
+	Id int32 `validate:"required"`
 }
